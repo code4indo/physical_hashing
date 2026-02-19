@@ -1,0 +1,30 @@
+Metadata-Version: 2.4
+Name: arch-fingerprint
+Version: 0.1.0
+Summary: ARCH-FINGERPRINT: Automated Historical Archive Identification via DINOv2 Visual Fingerprinting
+License: MIT
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: torch>=2.1.0
+Requires-Dist: torchvision>=0.16.0
+Requires-Dist: faiss-cpu>=1.7.4
+Requires-Dist: fastapi>=0.104.0
+Requires-Dist: uvicorn[standard]>=0.24.0
+Requires-Dist: sqlalchemy[asyncio]>=2.0.23
+Requires-Dist: asyncpg>=0.29.0
+Requires-Dist: alembic>=1.13.0
+Requires-Dist: opencv-python-headless>=4.8.0
+Requires-Dist: Pillow>=10.0.0
+Requires-Dist: numpy>=1.24.0
+Requires-Dist: pydantic>=2.5.0
+Requires-Dist: pydantic-settings>=2.1.0
+Requires-Dist: python-multipart>=0.0.6
+Requires-Dist: aiofiles>=23.2.0
+Provides-Extra: gpu
+Requires-Dist: faiss-gpu>=1.7.4; extra == "gpu"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.23.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: httpx>=0.25.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"

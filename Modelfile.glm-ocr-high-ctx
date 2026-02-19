@@ -1,0 +1,10 @@
+FROM glm-ocr:latest
+
+# Increase context window size for better performance with large text blocks
+PARAMETER num_ctx 8192
+
+# Optionally adjust temperature for more deterministic output
+PARAMETER temperature 0
+
+# You might also want to increase num_keep if you are doing multi-shot
+# But for single image OCR, num_ctx is the main one.

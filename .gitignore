@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.env
+build/
+dist/
+*.bak
+
+# AI Models (Large files)
+*.pt
+*.pth
+*.onnx
+
+# Project Data & DB
+data/
+*.db
+*.index
+*.idmap.npy
+backend.log
+*.log
+
+# Reports & Debug
+ocr_verification_report.txt
+
+# Editor/IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Agent folders
+.claude/
+.gemini/
+
+# Flutter/Dart (Root level ignores if applicable)
+arch_fingerprint_gui/build/
+arch_fingerprint_gui/.dart_tool/
+arch_fingerprint_gui/.packages
+arch_fingerprint_gui/.flutter-plugins
+arch_fingerprint_gui/.flutter-plugins-dependencies

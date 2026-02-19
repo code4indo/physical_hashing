@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arch-fingerprint"
+version = "0.1.0"
+description = "ARCH-FINGERPRINT: Automated Historical Archive Identification via DINOv2 Visual Fingerprinting"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+dependencies = [
+    "torch>=2.1.0",
+    "torchvision>=0.16.0",
+    "faiss-cpu>=1.7.4",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "sqlalchemy[asyncio]>=2.0.23",
+    "asyncpg>=0.29.0",
+    "alembic>=1.13.0",
+    "opencv-python-headless>=4.8.0",
+    "Pillow>=10.0.0",
+    "numpy>=1.24.0",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "python-multipart>=0.0.6",
+    "aiofiles>=23.2.0",
+    "aiohttp>=3.9.0",
+    # Added based on usage and installed packages
+    "rembg>=2.0.0",
+    "sentence-transformers>=2.2.0",
+    "scikit-image>=0.21.0",
+    "scikit-learn>=1.3.0",
+    "ultralytics>=8.0.0",
+    "matplotlib>=3.7.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+gpu = ["faiss-gpu>=1.7.4"]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.25.0",
+    "ruff>=0.1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+asyncio_mode = "auto"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
