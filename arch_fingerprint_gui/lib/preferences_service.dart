@@ -39,12 +39,26 @@ class PreferencesService {
 
   Future<String> getServerUrl() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('server_url') ?? 'http://192.168.1.10:8000';
+    final saved = prefs.getString('server_url') ?? 'http://127.0.0.1:8000';
+    return _normalizeUrl(saved);
   }
 
   Future<void> setServerUrl(String url) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('server_url', url);
+    await prefs.setString('server_url', _normalizeUrl(url));
+  }
+
+  /// Normalizes URL: adds http:// if missing, strips trailing slash.
+  String _normalizeUrl(String url) {
+    String result = url.trim();
+    if (result.isEmpty) return 'http://127.0.0.1:8000';
+    if (!result.startsWith('http://') && !result.startsWith('https://')) {
+      result = 'http://$result';
+    }
+    if (result.endsWith('/')) {
+      result = result.substring(0, result.length - 1);
+    }
+    return result;
   }
 
   static const String keyDefaultFlash = "default_flash";

@@ -1,8 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- INTERNET permission wajib untuk HTTP request ke server -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- ACCESS_NETWORK_STATE untuk cek status koneksi -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:label="arch_fingerprint_gui"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
+        <!-- usesCleartextTraffic="true" wajib untuk HTTP (bukan HTTPS) di Android 9+
+             Server menggunakan http://10.13.0.243:8000 (cleartext, bukan TLS) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

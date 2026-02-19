@@ -20,6 +20,10 @@ logger = logging.getLogger(__name__)
 # Dedicated thread pool for AI work — separate from FastAPI's default pool
 _ai_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="ai-worker")
 
+# Global async lock to prevent race condition on vector_id allocation
+# across concurrent background jobs in batch uploads
+_vector_id_lock = asyncio.Lock()
+
 # Async queue for pending jobs
 _job_queue: asyncio.Queue | None = None
 _worker_task: asyncio.Task | None = None
@@ -138,7 +142,7 @@ async def _worker_loop():
     from arch_fingerprint.db.vector_id_manager import get_vector_id_allocator
     from arch_fingerprint.config import settings as app_settings
     from arch_fingerprint.ai.ocr import run_ocr_async
-    from sqlalchemy import update
+    from sqlalchemy import update, select as sa_select, func
 
     q = get_queue()
     logger.info("Background AI worker started. Waiting for jobs...")
@@ -173,7 +177,23 @@ async def _worker_loop():
             embedder = get_embedder()
             index = get_vector_index()
             loop = asyncio.get_event_loop()
-            
+
+            # =================================================================
+            # KRITIS: Alokasikan start_vector_id dengan lock SEBELUM
+            # proses AI berjalan di thread pool.
+            #
+            # Tanpa lock ini, batch upload (banyak job masuk hampir bersamaan)
+            # bisa membaca index.total_vectors yang sama (race condition),
+            # sehingga dua dokumen mendapat vector_id identik →
+            # UNIQUE constraint failed.
+            # =================================================================
+            async with _vector_id_lock:
+                start_vector_id = index.total_vectors
+                logger.debug(
+                    "doc_id=%d: Reserved start_vector_id=%d (index size before processing)",
+                    job.doc_id, start_vector_id,
+                )
+
             # Step 1: Visual Embedding (GPU-heavy: DINOv2 + FastSAM)
             logger.info("doc_id=%d: Starting visual processing...", job.doc_id)
             visual_result = await loop.run_in_executor(
@@ -184,8 +204,7 @@ async def _worker_loop():
                 job.mode,
                 embedder,
                 index,
-                # Pass None to let _process_document_sync determine start ID
-                None, 
+                start_vector_id,  # Gunakan ID yang sudah di-reserve
             )
             logger.info("doc_id=%d: Visual processing complete.", job.doc_id)
             
@@ -235,8 +254,28 @@ async def _worker_loop():
 
             start_vector_id = visual_result["start_vector_id"]
             
-            # Step 3: Save results
+            # Step 3: Save results to DB with UNIQUE conflict handling
             async with async_session_factory() as session:
+                # Safety net: cek apakah vector_id sudah dipakai dokumen lain
+                # (bisa terjadi jika lock di atas di-bypass karena restart/recovery)
+                conflict = await session.execute(
+                    sa_select(Document.id)
+                    .where(Document.vector_id == start_vector_id)
+                    .where(Document.id != job.doc_id)
+                )
+                if conflict.scalar() is not None:
+                    # vector_id sudah dipakai — ambil nilai baru yang aman
+                    max_result = await session.execute(
+                        sa_select(func.max(Document.vector_id))
+                        .where(Document.vector_id.isnot(None))
+                    )
+                    max_vid = max_result.scalar() or 0
+                    start_vector_id = max_vid + 1
+                    logger.warning(
+                        "doc_id=%d: vector_id conflict detected, reassigned to %d",
+                        job.doc_id, start_vector_id,
+                    )
+
                 # Update main document metadata
                 stmt = (
                     update(Document)
@@ -244,7 +283,7 @@ async def _worker_loop():
                     .values(
                         image_path=visual_result["processed_path"],
                         content_hash=visual_result["content_hash"],
-                        vector_id=start_vector_id,  # Save the actual start ID
+                        vector_id=start_vector_id,
                         text_content=ocr_text,
                         status="completed"
                     )

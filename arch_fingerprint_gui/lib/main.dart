@@ -2798,31 +2798,126 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  /// Normalizes user input URL: strips whitespace, adds http:// prefix if missing,
+  /// removes trailing slashes. Returns null if the input is clearly invalid.
+  String? _normalizeUrl(String input) {
+    String url = input.trim();
+    if (url.isEmpty) return null;
+
+    // Add http:// if no scheme provided
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'http://$url';
+    }
+
+    // Remove trailing slash
+    if (url.endsWith('/')) {
+      url = url.substring(0, url.length - 1);
+    }
+
+    // Validate the result is a parseable URI with host + port
+    try {
+      final uri = Uri.parse(url);
+      if (uri.host.isEmpty) return null;
+      // Ensure port is present (server always needs explicit port)
+      if (uri.port == 80 && !url.contains(':80')) {
+        // port defaults to 80 for http, that's fine
+      }
+      return url;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> _editServerUrl() async {
     final controller = TextEditingController(text: _serverUrl);
+    String? errorText;
+
     final newUrl = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E1E),
-        title: const Text("Edit Server URL", style: TextStyle(color: Colors.white)),
-        content: TextField(
-          controller: controller,
-          style: const TextStyle(color: Colors.white),
-          decoration: const InputDecoration(
-            hintText: "http://192.168.1.10:8000",
-            hintStyle: TextStyle(color: Colors.grey),
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          backgroundColor: const Color(0xFF1E1E1E),
+          title: const Text("Edit Server URL", style: TextStyle(color: Colors.white)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextField(
+                controller: controller,
+                style: const TextStyle(color: Colors.white),
+                keyboardType: TextInputType.url,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  hintText: "192.168.x.x:8000",
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  errorText: errorText,
+                  errorStyle: const TextStyle(color: Colors.redAccent),
+                ),
+                onChanged: (_) {
+                  if (errorText != null) {
+                    setDialogState(() => errorText = null);
+                  }
+                },
+              ),
+              const SizedBox(height: 16),
+              // Connection mode tips
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white10),
+                ),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      Icon(Icons.usb, size: 14, color: Color(0xFFD4AF37)),
+                      SizedBox(width: 6),
+                      Text("USB (adb forward):", style: TextStyle(color: Color(0xFFD4AF37), fontSize: 12, fontWeight: FontWeight.bold)),
+                    ]),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 2),
+                      child: Text("127.0.0.1:8000", style: TextStyle(color: Colors.white70, fontSize: 12, fontFamily: 'monospace')),
+                    ),
+                    SizedBox(height: 8),
+                    Row(children: [
+                      Icon(Icons.wifi, size: 14, color: Colors.lightBlueAccent),
+                      SizedBox(width: 6),
+                      Text("Wi-Fi (same network):", style: TextStyle(color: Colors.lightBlueAccent, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ]),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20, top: 2),
+                      child: Text("10.13.243.X:8000", style: TextStyle(color: Colors.white70, fontSize: 12, fontFamily: 'monospace')),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      "⚠ Cukup masukkan IP:PORT — http:// akan ditambahkan otomatis",
+                      style: TextStyle(color: Colors.grey, fontSize: 11, fontStyle: FontStyle.italic),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () {
+                final normalized = _normalizeUrl(controller.text);
+                if (normalized == null) {
+                  setDialogState(() => errorText = "Format tidak valid. Contoh: 10.13.243.5:8000");
+                  return;
+                }
+                Navigator.pop(dialogContext, normalized);
+              },
+              child: const Text("Save", style: TextStyle(color: Color(0xFFD4AF37))),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, controller.text),
-            child: const Text("Save", style: TextStyle(color: Color(0xFFD4AF37))),
-          ),
-        ],
       ),
     );
 
