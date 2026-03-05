@@ -1,0 +1,18 @@
+[Unit]
+Description=Ollama Service (v0.15.5 Isolated for OCR)
+After=network-online.target
+
+[Service]
+ExecStart=/tmp/ollama-v0155/bin/ollama serve
+User=ollama
+Group=ollama
+Restart=always
+RestartSec=3
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment="OLLAMA_HOST=0.0.0.0:11435"
+Environment="OLLAMA_MODELS=/media/lambda_one/DFSSD04/ollama_models"
+# Force memory safety limits if needed
+Environment="OLLAMA_MAX_VRAM=8192" 
+
+[Install]
+WantedBy=default.target

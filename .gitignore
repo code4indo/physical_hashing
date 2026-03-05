@@ -13,6 +13,8 @@ dist/
 *.pt
 *.pth
 *.onnx
+.hf_cache/
+.torch_cache/
 
 # Project Data & DB
 data/

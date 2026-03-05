@@ -42,16 +42,18 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = keyProperties["keyAlias"] as String
-            keyPassword = keyProperties["keyPassword"] as String
-            storeFile = keyProperties["storeFile"]?.let { file(it as String) }
-            storePassword = keyProperties["storePassword"] as String
+            if (keyPropertiesFile.exists()) {
+                keyAlias = keyProperties["keyAlias"] as String
+                keyPassword = keyProperties["keyPassword"] as String
+                storeFile = keyProperties["storeFile"]?.let { file(it as String) }
+                storePassword = keyProperties["storePassword"] as String
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (keyPropertiesFile.exists()) signingConfigs.getByName("release") else signingConfigs.getByName("debug")
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }

@@ -7,9 +7,11 @@ On shutdown, it saves the FAISS index to disk.
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from arch_fingerprint import __version__
@@ -116,7 +118,60 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve uploaded images
+# ── Thumbnail endpoint (must be registered BEFORE StaticFiles mount) ─────
+_THUMB_DIR = Path(settings.upload_dir) / ".thumbs"
+_THUMB_DIR.mkdir(parents=True, exist_ok=True)
+
+
+@app.get("/uploads/thumb/{filename}")
+def serve_thumbnail(
+    filename: str,
+    w: int = Query(400, ge=50, le=1200, description="Max thumbnail width"),
+):
+    """Serve a resized JPEG thumbnail with disk caching.
+
+    Thumbnails are generated on first request and cached to disk.
+    Cache is automatically invalidated when the source file is modified.
+    """
+    from PIL import Image as PILImage
+
+    # Sanitise filename (prevent path traversal)
+    safe_name = Path(filename).name
+    src = Path(settings.upload_dir) / safe_name
+    if not src.is_file():
+        raise HTTPException(status_code=404, detail="Image not found")
+
+    thumb_name = f"{src.stem}_w{w}.jpg"
+    thumb_path = _THUMB_DIR / thumb_name
+
+    # Serve from cache if it exists and is newer than the source
+    if thumb_path.exists() and thumb_path.stat().st_mtime >= src.stat().st_mtime:
+        return FileResponse(
+            str(thumb_path),
+            media_type="image/jpeg",
+            headers={"Cache-Control": "public, max-age=86400"},
+        )
+
+    # Generate thumbnail
+    try:
+        img = PILImage.open(src)
+        if img.mode in ("RGBA", "P", "LA"):
+            img = img.convert("RGB")
+        # Preserve aspect ratio; height limit = 3× width to handle tall docs
+        img.thumbnail((w, w * 3), PILImage.Resampling.LANCZOS)
+        img.save(thumb_path, format="JPEG", quality=80, optimize=True)
+    except Exception as exc:
+        logger.error("Thumbnail generation failed for %s: %s", safe_name, exc)
+        raise HTTPException(status_code=500, detail="Thumbnail generation failed")
+
+    return FileResponse(
+        str(thumb_path),
+        media_type="image/jpeg",
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
+
+
+# Serve uploaded images (full resolution)
 app.mount("/uploads", StaticFiles(directory=settings.upload_dir), name="uploads")
 
 # Register API routes

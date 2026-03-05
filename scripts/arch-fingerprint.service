@@ -1,0 +1,50 @@
+[Unit]
+Description=ARCH-FINGERPRINT Backend API Service
+Documentation=file:///media/lambda_one/DFSSD04/project/physical_hashing/README.md
+After=network.target ollama.service
+Wants=ollama.service
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=lambda_one
+Group=lambda_one
+WorkingDirectory=/media/lambda_one/DFSSD04/project/physical_hashing
+
+# Environment
+EnvironmentFile=/media/lambda_one/DFSSD04/project/physical_hashing/.env
+Environment="PATH=/home/lambda_one/.local/share/pypoetry/venv/bin:/usr/local/cuda/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/media/lambda_one/DFSSD04/project/physical_hashing/src"
+# Arahkan HuggingFace cache ke direktori persisten agar model tidak re-download
+Environment="HF_HOME=/media/lambda_one/DFSSD04/project/physical_hashing/.hf_cache"
+Environment="TORCH_HOME=/media/lambda_one/DFSSD04/project/physical_hashing/.torch_cache"
+
+# Command
+ExecStart=/home/lambda_one/.local/share/pypoetry/venv/bin/uvicorn \
+    src.arch_fingerprint.api.main:app \
+    --host 0.0.0.0 \
+    --port 8010 \
+    --workers 1 \
+    --loop uvloop \
+    --log-level info \
+    --access-log
+
+# Restart policy
+Restart=on-failure
+RestartSec=10
+
+# Resource limits
+# Komentar batas memori — model DINOv3+SentenceTransformer butuh ~6GB VRAM + ~8GB RAM
+LimitNOFILE=65536
+
+# Graceful shutdown (beri waktu worker drain queue)
+TimeoutStopSec=60
+
+# Logging ke journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=arch-fingerprint
+
+[Install]
+WantedBy=multi-user.target

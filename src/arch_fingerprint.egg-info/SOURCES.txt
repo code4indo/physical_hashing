@@ -1,3 +1,4 @@
+README.md
 pyproject.toml
 src/arch_fingerprint/__init__.py
 src/arch_fingerprint/config.py
@@ -8,7 +9,12 @@ src/arch_fingerprint.egg-info/requires.txt
 src/arch_fingerprint.egg-info/top_level.txt
 src/arch_fingerprint/ai/__init__.py
 src/arch_fingerprint/ai/model.py
+src/arch_fingerprint/ai/ocr.py
 src/arch_fingerprint/ai/preprocessing.py
+src/arch_fingerprint/ai/preprocessing_sam.py
+src/arch_fingerprint/ai/region_strategy.py
+src/arch_fingerprint/ai/robustness.py
+src/arch_fingerprint/ai/text_model.py
 src/arch_fingerprint/api/__init__.py
 src/arch_fingerprint/api/main.py
 src/arch_fingerprint/api/schemas.py
@@ -20,8 +26,13 @@ src/arch_fingerprint/api/routes/search.py
 src/arch_fingerprint/db/__init__.py
 src/arch_fingerprint/db/models.py
 src/arch_fingerprint/db/session.py
+src/arch_fingerprint/db/vector_id_manager.py
 src/arch_fingerprint/search/__init__.py
 src/arch_fingerprint/search/faiss_index.py
+src/arch_fingerprint/utils/__init__.py
+src/arch_fingerprint/utils/hashing.py
+src/arch_fingerprint/worker/__init__.py
+src/arch_fingerprint/worker/queue.py
 tests/test_api.py
 tests/test_faiss_index.py
 tests/test_model.py

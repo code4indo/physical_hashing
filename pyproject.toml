@@ -7,7 +7,7 @@ name = "arch-fingerprint"
 version = "0.1.0"
 description = "ARCH-FINGERPRINT: Automated Historical Archive Identification via DINOv2 Visual Fingerprinting"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 license = {text = "MIT"}
 
 dependencies = [

@@ -19,8 +19,12 @@ class Settings(BaseSettings):
 
     # AI Model
     model_device: str = "cuda" if __import__("torch").cuda.is_available() else "cpu"
-    # model_name: str = "dinov2_vitl14_reg" 
-    model_name: str = "facebook/dinov3-vitl16-pretrain-lvd1689m" # Start using DINOv3 from Hugging Face
+    # model_name: str = "dinov2_vitl14_reg"  # DINOv2 with registers (alternative)
+    model_name: str = "facebook/dinov3-vitl16-pretrain-lvd1689m"  # DINOv3 via HuggingFace (GATED REPO — requires HF auth)
+    # model_name: str = "dinov2_vitl14"  # DINOv2 ViT-L/14 via Torch Hub (public, no auth required)
+    
+    # Ollama OCR isolated endpoint (running on port 11435)
+    ollama_ocr_url: str = "http://localhost:11435/api/generate"
 
     # Text Model (SentenceTransformer)
     text_model_name: str = "intfloat/multilingual-e5-large"

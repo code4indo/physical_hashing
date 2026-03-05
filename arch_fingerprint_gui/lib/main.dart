@@ -1385,7 +1385,9 @@ class _HistoryPageState extends State<HistoryPage> {
         itemBuilder: (ctx, index) {
           final doc = _documents[index];
           final docId = doc['id'] as int;
-          final imageUrl = "$_serverUrl${doc['image_url']}?v=${DateTime.now().millisecondsSinceEpoch}";
+          // Use lightweight JPEG thumbnail for grid (≈21 KB vs 4+ MB full PNG)
+          final imgFilename = (doc['image_url'] as String).split('/').last;
+          final imageUrl = "$_serverUrl/uploads/thumb/$imgFilename?w=400";
           final isSelected = _selectedDocIds.contains(docId);
           
           return GestureDetector(
@@ -1431,6 +1433,7 @@ class _HistoryPageState extends State<HistoryPage> {
                               child: Image.network(
                                   imageUrl,
                                   fit: BoxFit.cover,
+                                  cacheWidth: 400,
                                   loadingBuilder: (c, child, p) => p == null ? child : const Center(child: CircularProgressIndicator(strokeWidth: 2)),
                                   errorBuilder: (_, __, ___) => const Center(child: Icon(Icons.broken_image, color: Colors.grey)),
                               ),

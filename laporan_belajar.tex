@@ -1,0 +1,144 @@
+% !TEX program = xelatex
+\documentclass[11pt, a4paper]{article}
+
+% --- UNIVERSAL PREAMBLE BLOCK ---
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+
+\usepackage[indonesian, bidi=basic, provide=*]{babel}
+
+\babelprovide[import, onchar=ids fonts]{indonesian}
+\babelprovide[import, onchar=ids fonts]{english}
+
+% Set default/Latin font to Sans Serif in the main (rm) slot
+\babelfont{rm}{Arimo}
+% Assign a specific font for Indonesian text
+\babelfont[indonesian]{rm}{Arimo}
+
+% Add because main language is not English
+\usepackage{enumitem}
+\setlist[itemize]{label=$\bullet$}
+% --------------------------------
+
+\usepackage{microtype}
+\usepackage{setspace}
+\usepackage{indentfirst} % Agar paragraf pertama menjorok ke dalam
+\setstretch{1.15} % Sedikit spasi agar mudah dibaca
+\usepackage{titlesec}
+
+% Format Judul Bab dan Sub-bab
+\titleformat{\section}{\large\bfseries}{\Roman{section}.}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\Alph{subsection}.}{1em}{}
+
+\begin{document}
+\sloppy
+
+\begin{center}
+    \Large \textbf{LAPORAN PELAKSANAAN TUGAS BELAJAR}\\
+    \large \textbf{PROGRAM MAGISTER INFORMATIKA (SMART SYSTEM / SMART-X)}\\
+    \large \textbf{INSTITUT TEKNOLOGI BANDUNG}
+\end{center}
+\vspace{1cm}
+
+\section{PENDAHULUAN}
+
+\subsection{Latar Belakang}
+Transformasi digital pemerintahan merupakan agenda strategis nasional yang tertuang dalam arsitektur Sistem Pemerintahan Berbasis Elektronik (SPBE). Untuk merealisasikan hal tersebut, kehadiran Aparatur Sipil Negara (ASN) yang memiliki kompetensi teknis tingkat tinggi (talenta digital) menjadi sebuah keharusan. Organisasi pemerintahan, termasuk Arsip Nasional Republik Indonesia (ANRI), dituntut untuk terus menciptakan dan mengembangkan talenta digital guna merespons tantangan tata kelola arsip di era modern.
+
+Sejalan dengan visi tersebut, Kementerian Komunikasi dan Informatika (kini Kementerian Komdigi) menyelenggarakan Program Beasiswa S2 Dalam Negeri. Program ini berfokus pada pengembangan sumber daya manusia di bidang Teknologi Informasi dan Komunikasi (TIK) guna mencetak pembuat kebijakan dan analis TIK yang andal di instansi pemerintah. Salah satu program unggulan dalam beasiswa ini adalah Program Magister Transformasi Digital dengan pendalaman Multidisiplin Kecerdasan Sistem (\textit{Smart System} / Smart-X) di Institut Teknologi Bandung (ITB). Program ini dirancang secara khusus untuk menjawab tantangan kompleks era digital dan transformasi Indonesia menuju \textit{smart ecosystem} melalui pendekatan yang holistik.
+
+Kecerdasan Artifisial (\textit{Artificial Intelligence} / AI) saat ini telah menjadi pilar utama dalam modernisasi layanan publik. Bagi ANRI, implementasi AI sangat krusial, khususnya dalam preservasi arsip sejarah. Ribuan koleksi dokumen paleografi ANRI dari abad ke-16 hingga ke-18---yang merupakan \textit{Memory of the World}---mengalami degradasi fisik parah seperti rembesan tinta, korosi tinta besi galat, dan pemudaran. Kerusakan ini membuat dokumen nyaris mustahil dibaca oleh mesin (\textit{Handwritten Text Recognition} / HTR). Oleh karena itu, pendidikan magister ini diambil untuk memecahkan masalah pelestarian digital arsip nasional secara konkret.
+
+\subsection{Dasar Hukum}
+Pelaksanaan Tugas Belajar ini dilandaskan pada peraturan perundang-undangan dan keputusan administrasi sebagai berikut:
+\begin{enumerate}
+    \item Undang-Undang Nomor 20 Tahun 2023 tentang Aparatur Sipil Negara.
+    \item Undang-Undang Nomor 43 Tahun 2009 tentang Kearsipan.
+    \item Peraturan Pemerintah Nomor 11 Tahun 2017 tentang Manajemen Pegawai Negeri Sipil sebagaimana telah diubah dengan Peraturan Pemerintah Nomor 17 Tahun 2020.
+    \item Surat Sekretaris Badan Penelitian dan Pengembangan Sumber Daya Manusia Kementerian Komunikasi dan Informatika Republik Indonesia Nomor: B-2844/BLSDM.1/LT.02.03/12/2023 tanggal 29 Desember 2023.
+    \item Keputusan Kepala Arsip Nasional Republik Indonesia Nomor 121 Tahun 2024 tentang Pemberian Tugas Belajar Kepada Pegawai Negeri Sipil Di Lingkungan Arsip Nasional Republik Indonesia.
+\end{enumerate}
+
+\subsection{Maksud dan Tujuan}
+Maksud dari penyusunan laporan ini adalah sebagai bentuk pertanggungjawaban administratif dan akademis atas selesainya masa Tugas Belajar. Hal ini merujuk pada Diktum KETUJUH Keputusan Kepala ANRI Nomor 121 Tahun 2024, yang mewajibkan pegawai tugas belajar untuk melapor kepada Pejabat Pembina Kepegawaian paling lama 15 (lima belas) hari kerja sejak berakhirnya masa tugas belajar. 
+
+Tujuan dari laporan ini adalah:
+\begin{enumerate}
+    \item Melaporkan capaian akademis dan kelulusan dari Program Magister Informatika ITB.
+    \item Memaparkan hasil riset/tesis yang telah dilakukan, beserta implikasi praktisnya bagi inovasi dan peningkatan kinerja di lingkungan Arsip Nasional Republik Indonesia.
+\end{enumerate}
+
+\vspace{0.5cm}
+
+\section{PELAKSANAAN TUGAS BELAJAR}
+
+\subsection{Profil Mahasiswa dan Program Studi}
+Pelaksanaan tugas belajar dilaksanakan dengan rincian data pegawai dan institusi pendidikan sebagai berikut:
+\begin{itemize}
+    \item Nama: Jatniko Nur Mutaqin, S.Kom.
+    \item NIP: 198803142009121002
+    \item Pangkat/Golongan: Penata Muda Tingkat I, III/b
+    \item Jabatan / Unit Kerja: Pranata Komputer Ahli Pertama / Direktorat Preservasi ANRI
+    \item Perguruan Tinggi: Institut Teknologi Bandung (ITB)
+    \item Fakultas: Sekolah Teknik Elektro dan Informatika (STEI)
+    \item Program Studi: Magister Informatika (Reguler) dengan Pendalaman Multidisiplin \textit{Smart System} (Smart-X)
+    \item Periode Tugas Belajar: 5 Februari 2024 s.d. 31 Januari 2026
+    \item Sumber Pembiayaan: Kementerian Komunikasi dan Informatika Republik Indonesia (Beasiswa S2 Dalam Negeri / Komdigi)
+\end{itemize}
+
+Deskripsi Program Pendalaman (\textit{Smart-X}):\\
+Program \textit{Smart-X} ini memiliki visi untuk menghasilkan pemimpin transformasi digital melalui pendekatan kecerdasan sistem yang holistik (\textit{Sensing--Understanding--Acting}). Program ini sangat interdisipliner dan berfokus pada pembentukan lulusan sebagai \textit{Smart Solution Builder} dan \textit{Transformer}. Lulusan dibekali dengan penguasaan teknologi kunci seperti \textit{Internet of Things} (IoT) \& \textit{Modern Sensing}, \textit{Artificial Intelligence} (AI) \& \textit{Machine Learning}, \textit{Big Data Analytics}, serta kepemimpinan digital (\textit{Digital Leadership}).
+
+\subsection{Capaian Akademik}
+Pendidikan tingkat magister telah berhasil diselesaikan dengan capaian yang sangat baik. Mahasiswa secara resmi dinyatakan lulus pada tanggal 20 Januari 2026 dan dianugerahi gelar Magister Teknik (M.T.). 
+\begin{itemize}
+    \item Indeks Prestasi Kumulatif (IPK): 3,72
+    \item Predikat Kelulusan: Sangat Memuaskan
+    \item Total SKS Tempuh: 61 SKS
+    \item Akreditasi Program Studi: Unggul (Berdasarkan Keputusan BAN-PT)
+\end{itemize}
+
+Selama masa studi, mahasiswa telah menempuh berbagai mata kuliah yang menunjang tata kelola TIK dan implementasi AI di pemerintahan, di antaranya: Manajemen Data (Nilai A), Tata Pamong Data (Nilai A), Aplikasi Inteligensi Artifisial untuk Enterprise (Nilai A), Strategi Dijital (Nilai AB), serta Keamanan dan Privasi Layanan Digital. Rangkaian mata kuliah ini memberikan kompetensi komprehensif dalam menganalisis permasalahan informatika, mendesain solusi berbasis komputasi untuk dataset besar, serta penerapan teknologi \textit{Artificial Intelligence} yang efektif dan efisien di tingkat \textit{enterprise}.
+
+\subsection{Hasil Riset dan Tesis}
+Sebagai syarat kelulusan, mahasiswa telah berhasil menyusun dan mempertahankan tesis yang sangat relevan dengan tugas pokok dan fungsi (Tupoksi) Direktorat Preservasi ANRI. 
+
+\begin{itemize}
+    \item Judul Tesis: "Restorasi Dokumen Terdegradasi Menggunakan \textit{Generative Adversarial Network} dengan Diskriminator Dual-Modal Dan Optimasi \textit{Loss Function} Berorientasi HTR"
+    \item Latar Belakang Riset: Arsip sejarah ANRI (abad 16--18) banyak yang mengalami kerusakan fisik seperti rembesan tinta (\textit{bleed-through}), korosi tinta, dan pemudaran. Pendekatan restorasi konvensional umumnya hanya fokus pada perbaikan visual secara estetika (menghilangkan noda), namun gagal membuat dokumen tersebut dapat dibaca secara otomatis oleh mesin / \textit{Handwritten Text Recognition} (HTR). 
+    \item Inovasi: Mengembangkan kerangka kerja kecerdasan buatan (AI) berbasis \textit{Generative Adversarial Network} (GAN) dengan arsitektur \textit{Frozen Recognizer}. Model AI ini tidak hanya membersihkan dokumen secara visual, tetapi dipaksa (melalui \textit{loss function} khusus) untuk mempelajari struktur teks, sehingga hasil restorasinya sangat ramah terhadap sistem pembacaan mesin (HTR).
+    \item Hasil dan Implikasi bagi ANRI:
+    \begin{itemize}
+        \item Sistem AI yang diusulkan berhasil menurunkan Tingkat Kesalahan Karakter (\textit{Character Error Rate} / CER) secara drastis dari rata-rata 83,4\% (pada dokumen rusak) menjadi 34,9\% (pada dokumen yang telah direstorasi). 
+        \item Kerangka kerja ini diuji langsung menggunakan dokumen autentik ANRI era VOC dan Hindia Belanda (1650--1800), dan mendapat skor kesesuaian dari ahli paleografi sebesar 3,42 dari skala 4,0. 
+        \item Secara praktis, solusi ini siap diintegrasikan ke dalam alur kerja (\textit{pipeline}) digitalisasi di ANRI, mempercepat proses transkripsi arsip yang tadinya tidak terbaca menjadi aset data digital yang kaya akan nilai sejarah.
+    \end{itemize}
+\end{itemize}
+
+\vspace{0.5cm}
+
+\section{PENUTUP}
+
+\subsection{Kesimpulan}
+Pelaksanaan Tugas Belajar Program Magister Informatika pendalaman \textit{Smart System} (Smart-X) di STEI ITB yang dibiayai oleh Kementerian Komdigi telah diselesaikan tepat waktu dengan IPK 3,72 (Sangat Memuaskan). Pendidikan ini berhasil meningkatkan kompetensi pegawai dalam bidang Kecerdasan Artifisial, Tata Kelola Data, dan Strategi Digital, sejalan dengan tujuan program untuk mencetak \textit{Digital Transformation Leader}. Melalui penelitian tesis yang dihasilkan, pegawai telah berhasil menciptakan solusi konkret berbasis AI untuk merestorasi arsip dokumen historis ANRI yang terdegradasi, sehingga meningkatkan akurasi keterbacaan oleh mesin secara signifikan.
+
+\subsection{Saran dan Rekomendasi}
+Sebagai upaya \textit{return of investment} dari program tugas belajar dan beasiswa ini, serta tindak lanjut pengembangan SDM ke depan, direkomendasikan agar:
+\begin{enumerate}
+    \item Pimpinan ANRI dapat mendayagunakan kompetensi pegawai tidak hanya sebagai tenaga teknis, tetapi juga diberdayakan secara strategis sebagai pemimpin transformasi digital (\textit{Digital Transformation Leader}) atau arsitek sistem AI (\textit{AI System Architect}) dalam merancang ekosistem kearsipan cerdas (\textit{smart system}) di lingkungan ANRI.
+    \item Pimpinan ANRI dapat mendayagunakan kompetensi yang telah diperoleh pegawai untuk mengakselerasi program digitalisasi dan preservasi arsip berbasis kecerdasan artifisial (AI) di lingkungan Direktorat Preservasi.
+    \item Hasil riset tesis ini dapat diimplementasikan dan diintegrasikan sebagai perangkat pra-pemrosesan (\textit{pre-processing tools}) dalam sistem informasi kearsipan ANRI untuk mendukung percepatan ekstraksi teks pada naskah kuno nusantara.
+    \item Sebagai tindak lanjut pengembangan kapasitas SDM strategis di bidang tata kelola Kecerdasan Artifisial, Pimpinan ANRI dapat mempertimbangkan dan mendukung rencana studi lanjutan ke jenjang Doktoral (S3). Pegawai telah mendapatkan rekomendasi akademik langsung dari Dosen Pembimbing Utama ITB (Ir. I Gusti Bagus Baskara Nugraha, S.T., M.T., Ph.D.) untuk melanjutkan riset ke \textit{Department of Electrical Engineering and Computer Sciences} (EECS), University of California (UC) Berkeley, Amerika Serikat.
+    \item Fokus riset S3 yang dituju adalah \textit{AI Safety \& Alignment} di bawah supervisi Prof. Stuart Russell (Professor of EECS UC Berkeley \& Director of Kavli Center for Ethics, Science, and the Public). Keahlian di bidang tata kelola dan keamanan AI ini dinilai sangat krusial bagi pemerintah Indonesia ke depan, khususnya bagi ANRI dalam memastikan implementasi AI di sektor kearsipan dan layanan publik tetap aman, etis, dan selaras dengan nilai-nilai kemanusiaan serta regulasi negara.
+\end{enumerate}
+
+Sebagai kelengkapan administrasi, bersama laporan ini dilampirkan salinan ijazah dan transkrip akademik yang sah. Dokumen tersebut dapat digunakan sebagai bukti kelulusan, persyaratan pencantuman gelar, pengakuan angka kredit, dan keperluan kepegawaian lainnya. Demikian laporan pelaksanaan tugas belajar ini disusun dengan sebenar-benarnya untuk dapat dipergunakan sebagaimana mestinya. Atas kesempatan dan dukungan yang diberikan oleh pimpinan Arsip Nasional Republik Indonesia dan Kementerian Komunikasi dan Digital, diucapkan terima kasih.
+
+\vspace{1.5cm}
+\begin{flushright}
+    Jakarta, 15 Februari 2026\\[2.5cm]
+    Jatniko Nur Mutaqin, S.Kom., M.T.\\
+    NIP. 198803142009121002
+\end{flushright}
+
+\end{document}
